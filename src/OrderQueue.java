@@ -30,5 +30,9 @@ public class OrderQueue {
         orders.remove();
     }
 
+    public void clear() {
+        orders.clear();
+    }
+
     // Tutaj można dodać metody do zapisu i odczytu kolejki do/z pliku
 }

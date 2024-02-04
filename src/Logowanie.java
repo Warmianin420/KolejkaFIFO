@@ -24,6 +24,7 @@ public class Logowanie extends JFrame {
         setVisible(true);
         int width = 500, height = 200;
         setSize(width, height);
+        this.setLocationRelativeTo(null);
 
         sendButton.addActionListener(new ActionListener() {
             @Override

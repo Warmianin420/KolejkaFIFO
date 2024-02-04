@@ -31,15 +31,17 @@ public class Kolejka extends JFrame {
         setVisible(true);
         int width = 800, height = 600;
         setSize(width, height);
+        this.setLocationRelativeTo(null);
 
         String[] columnNames = {"ID Zamówienia", "Klient", "Produkt", "Ilość"};
         model = new DefaultTableModel(columnNames, 0);
         Tabela.setModel(model);
+        wczytajKolejke(); //żeby na start dane były wczytane
 
         dodajButton.addActionListener(e -> dodajZamowienie());
         usuńButton.addActionListener(e -> usunZamowienie());
         zapiszButton.addActionListener(e -> zapiszKolejke());
-        wczytajButton.addActionListener(e -> wczytajKolejke());
+        wczytajButton.addActionListener(e -> wczytajKolejke()); //żeby odświeżyć tabelę
         wyjdźButton.addActionListener(e -> dispose());
     }
 
@@ -68,9 +70,11 @@ public class Kolejka extends JFrame {
     }
 
     private void zapiszKolejke() {
-        try (PrintWriter out = new PrintWriter(new FileWriter("kolejka.txt"))) {
-            for (Zamowienie zamowienie : kolejka.getOrder()) {
-                out.println(zamowienie.toString()); // Zakładamy, że Zamowienie ma odpowiednio zaimplementowaną metodę toString
+        try (PrintWriter plik = new PrintWriter(new FileWriter("kolejka.txt"))) {
+            if (!kolejka.isEmpty()) {
+                for (Zamowienie zamowienie : kolejka.getOrder()) {
+                    plik.println(zamowienie.toString()); // Zakładamy, że Zamowienie ma odpowiednio zaimplementowaną metodę toString
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,6 +84,8 @@ public class Kolejka extends JFrame {
     private void wczytajKolejke() {
         try (BufferedReader br = new BufferedReader(new FileReader("kolejka.txt"))) {
             String line;
+            model.setRowCount(0); //żeby dane w tabeli nie duplikowały się
+            kolejka.clear(); //żeby dane w tabeli nie duplikowały się
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 4) {
@@ -90,7 +96,7 @@ public class Kolejka extends JFrame {
 
                     Zamowienie zamowienie = new Zamowienie(customerName, productName, quantity);
                     kolejka.addOrder(zamowienie);
-                    model.addRow(new Object[]{zamowienie.getId(), customerName, productName, quantity});
+                    model.addRow(new Object[]{id, customerName, productName, quantity});
                 }
             }
         } catch (IOException e) {
@@ -99,5 +105,4 @@ public class Kolejka extends JFrame {
             JOptionPane.showMessageDialog(this, "Nieprawidłowy format danych w pliku", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 }
