@@ -56,7 +56,12 @@ public class Kolejka extends JFrame {
             return;
         }
 
-        Zamowienie zamowienie = new Zamowienie(customerName, productName, quantity);
+        int id = kolejka.getNextId();
+
+//        int liczbaWierszy = model.getRowCount();
+//        int id = (int) (Tabela.getValueAt(liczbaWierszy, 1));
+
+        Zamowienie zamowienie = new Zamowienie(id, customerName, productName, quantity);
         kolejka.addOrder(zamowienie);
         model.addRow(new Object[]{zamowienie.getId(), customerName, productName, quantity});
     }
@@ -94,7 +99,8 @@ public class Kolejka extends JFrame {
                     String productName = parts[2].trim();
                     int quantity = Integer.parseInt(parts[3].trim());
 
-                    Zamowienie zamowienie = new Zamowienie(customerName, productName, quantity);
+                    Zamowienie zamowienie = new Zamowienie(id, customerName, productName, quantity);
+
                     kolejka.addOrder(zamowienie);
                     model.addRow(new Object[]{id, customerName, productName, quantity});
                 }

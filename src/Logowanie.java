@@ -14,8 +14,6 @@ public class Logowanie extends JFrame {
     private JTextField loginField;
     private JLabel passwordLabel;
     private JPasswordField passwordField;
-    private JButton registerButton;
-    private JLabel noAccountLabel;
     private String user = "admin", password = "admin";
 
     public Logowanie() {
@@ -55,14 +53,6 @@ public class Logowanie extends JFrame {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Rejestracja().setVisible(true);
                 dispose();
             }
         });
