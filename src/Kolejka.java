@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
+import java.awt.GridLayout;
 
 public class Kolejka extends JFrame {
     private JPanel JPanelK;
@@ -46,26 +47,60 @@ public class Kolejka extends JFrame {
     }
 
     private void dodajZamowienie() {
-        String customerName = JOptionPane.showInputDialog(this, "Podaj imię klienta:");
-        String productName = JOptionPane.showInputDialog(this, "Podaj nazwę produktu:");
-        int quantity;
-        try {
-            quantity = Integer.parseInt(JOptionPane.showInputDialog(this, "Podaj ilość:"));
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Nieprawidłowa ilość", "Błąd", JOptionPane.ERROR_MESSAGE);
-            return;
+        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+
+        JTextField customerNameField = new JTextField(10);
+        JTextField productNameField = new JTextField(10);
+        JTextField quantityField = new JTextField(10);
+
+        panel.add(new JLabel("Imię klienta:"));
+        panel.add(customerNameField);
+        panel.add(new JLabel("Produkt:"));
+        panel.add(productNameField);
+        panel.add(new JLabel("Ilość:"));
+        panel.add(quantityField);
+
+        int result = JOptionPane.showConfirmDialog(
+                this, panel, "Dodaj zamówienie", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String customerName = customerNameField.getText();
+            String productName = productNameField.getText();
+            int quantity;
+
+            try {
+                quantity = Integer.parseInt(quantityField.getText());
+
+                if (quantity <= 0) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Nieprawidłowa ilość", "Błąd", JOptionPane.ERROR_MESSAGE);
+                return;
+            } catch (IllegalArgumentException e) {
+                JOptionPane.showMessageDialog(this, "Ilość nie może być mniejsza lub równa zero", "Błąd", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (customerName.isEmpty() || productName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Pola nie mogą być puste", "Błąd", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (!czyZawieraTylkoLitery(customerName) || !czyZawieraTylkoLitery(productName)) {
+                JOptionPane.showMessageDialog(this, "Imię klienta i nazwa produktu mogą zawierać tylko litery", "Błąd", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+//            int id = kolejka.getNextId();
+            int id = (int) Tabela.getValueAt(model.getRowCount() - 1, 0);
+            Zamowienie zamowienie = new Zamowienie(customerName, productName, quantity);
+            kolejka.addOrder(zamowienie);
+            model.addRow(new Object[]{id + 1, customerName, productName, quantity});
+
+            JOptionPane.showMessageDialog(this, "Dodano zamówienie do bazy danych", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        int id = kolejka.getNextId();
-
-//        int liczbaWierszy = model.getRowCount();
-//        int id = (int) (Tabela.getValueAt(liczbaWierszy, 1));
-
-        Zamowienie zamowienie = new Zamowienie(id, customerName, productName, quantity);
-        kolejka.addOrder(zamowienie);
-        model.addRow(new Object[]{zamowienie.getId(), customerName, productName, quantity});
     }
-
 
     private void usunZamowienie() {
         if (!kolejka.isEmpty()) {
@@ -82,8 +117,11 @@ public class Kolejka extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+
+        JOptionPane.showMessageDialog(this, "Zapisano kolejkę do bazy danych", "Success", JOptionPane.INFORMATION_MESSAGE);
+        wczytajKolejke();
     }
 
     private void wczytajKolejke() {
@@ -91,18 +129,20 @@ public class Kolejka extends JFrame {
             String line;
             model.setRowCount(0); //żeby dane w tabeli nie duplikowały się
             kolejka.clear(); //żeby dane w tabeli nie duplikowały się
+            int id = 1;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 4) {
-                    int id = Integer.parseInt(parts[0].trim());
-                    String customerName = parts[1].trim();
-                    String productName = parts[2].trim();
-                    int quantity = Integer.parseInt(parts[3].trim());
+                if (parts.length == 3) {
+//                    int id = Integer.parseInt(parts[0].trim());
+                    String customerName = parts[0].trim();
+                    String productName = parts[1].trim();
+                    int quantity = Integer.parseInt(parts[2].trim());
 
-                    Zamowienie zamowienie = new Zamowienie(id, customerName, productName, quantity);
+                    Zamowienie zamowienie = new Zamowienie(customerName, productName, quantity);
 
                     kolejka.addOrder(zamowienie);
                     model.addRow(new Object[]{id, customerName, productName, quantity});
+                    id++;
                 }
             }
         } catch (IOException e) {
@@ -110,5 +150,9 @@ public class Kolejka extends JFrame {
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Nieprawidłowy format danych w pliku", "Błąd", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private boolean czyZawieraTylkoLitery(String tekst) {
+        return tekst.matches("^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\\s]*$");
     }
 }

@@ -2,7 +2,7 @@ import java.sql.Connection;
 
 public class Main {
     public static void main(String[] args) {
-        Logowanie logowanie = new Logowanie();
+        PanelWyboru panelWyboru = new PanelWyboru();
 
         /* Dodawanie zamówień
         orderQueue.addOrder(new Zamowienie("Jan Kowalski", "Laptop", 1));

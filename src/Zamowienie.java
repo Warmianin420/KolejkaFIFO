@@ -1,23 +1,12 @@
 public class Zamowienie {
-//    private static int nextId = 1; // Generator unikalnych ID dla zamówień
-    private int id;
     private String customerName;
     private String productName;
     private int quantity;
 
-    public Zamowienie(int id, String customerName, String productName, int quantity) {
-        this.id = id;
+    public Zamowienie(String customerName, String productName, int quantity) {
         this.customerName = customerName;
         this.productName = productName;
         this.quantity = quantity;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getCustomerName() {
@@ -34,6 +23,6 @@ public class Zamowienie {
 
     @Override
     public String toString() {
-        return id + "," + customerName + "," + productName + "," + quantity;
+        return customerName + "," + productName + "," + quantity;
     }
 }

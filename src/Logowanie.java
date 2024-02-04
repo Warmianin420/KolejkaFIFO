@@ -27,20 +27,20 @@ public class Logowanie extends JFrame {
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                            String userLogin = loginField.getText();
-                            String userPassword = new String(passwordField.getPassword());
+                String userLogin = loginField.getText();
+                String userPassword = new String(passwordField.getPassword());
 
-                            if (!userLogin.isEmpty() && !userPassword.isEmpty()) {
-                                if (userLogin.equals(user) && userPassword.equals(password)) {
-                                    dispose();
-                                    new Kolejka().setVisible(true);
-                                } else {
-                                    JOptionPane.showMessageDialog(Logowanie.this,
-                                            "Wprowadzono błędne dane, spróbuj ponownie!", "Błąd",
-                                            JOptionPane.ERROR_MESSAGE);
+                if (!userLogin.isEmpty() && !userPassword.isEmpty()) {
+                    if (userLogin.equals(user) && userPassword.equals(password)) {
+                        dispose();
+                        new Kolejka().setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(Logowanie.this,
+                                "Wprowadzono błędne dane, spróbuj ponownie!", "Błąd",
+                                JOptionPane.ERROR_MESSAGE);
 
-                                    loginField.setText("");
-                                    passwordField.setText("");
+                        loginField.setText("");
+                        passwordField.setText("");
                     }
                 } else {
                     JOptionPane.showMessageDialog(Logowanie.this,
