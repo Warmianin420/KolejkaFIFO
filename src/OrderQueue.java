@@ -12,14 +12,22 @@ public class OrderQueue {
         orders.offer(order);
     }
 
-    public Zamowienie getOrder() {
-        return orders.poll();
+    public Queue<Zamowienie> getOrder() {
+        return orders;
     }
 
     public void displayOrders() {
         for (Zamowienie order : orders) {
             System.out.println(order);
         }
+    }
+
+    public boolean isEmpty() {
+        return orders.isEmpty();
+    }
+
+    public void poll() {
+        orders.remove();
     }
 
     // Tutaj można dodać metody do zapisu i odczytu kolejki do/z pliku

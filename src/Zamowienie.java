@@ -30,11 +30,6 @@ public class Zamowienie {
 
     @Override
     public String toString() {
-        return "Zamowienie{" +
-                "id=" + id +
-                ", customerName='" + customerName + '\'' +
-                ", productName='" + productName + '\'' +
-                ", quantity=" + quantity +
-                '}';
+        return id + "," + customerName + "," + productName + "," + quantity;
     }
 }

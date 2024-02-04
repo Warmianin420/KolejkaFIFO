@@ -7,7 +7,7 @@ public class Logowanie extends JFrame {
     private JPanel JPanel2;
     private JPanel JPanel3;
     private JPanel JPanel4;
-    private JLabel logowanieKlientaLabel;
+    private JLabel logowanieLabel;
     private JButton sendButton;
     private JButton cancelButton;
     private JLabel loginLabel;
@@ -24,28 +24,40 @@ public class Logowanie extends JFrame {
         setVisible(true);
         int width = 500, height = 200;
         setSize(width, height);
+
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String userLogin = passwordField.getText();
+                String userLogin = loginField.getText();
                 String userPassword = new String(passwordField.getPassword());
-                if (userLogin.equals(user) && (userPassword.equals(password))) {
-                    dispose();
-                    new Kolejka().setVisible(true);
-                    System.out.println("Zalogowano do systemu");
+
+                if (!userLogin.isEmpty() && !userPassword.isEmpty()) {
+                    if (userLogin.equals(user) && userPassword.equals(password)) {
+                        dispose();
+                        new Kolejka().setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(Logowanie.this,
+                                "Wprowadzono błędne dane, spróbuj ponownie!", "Błąd",
+                                JOptionPane.ERROR_MESSAGE);
+
+                        loginField.setText("");
+                        passwordField.setText("");
+                    }
                 } else {
-                    System.out.println("Wprowadzono błędne dane. Spróbuj ponownie.");
-                    passwordField.setText("");
-                    passwordField.setText("");
+                    JOptionPane.showMessageDialog(Logowanie.this,
+                            "Pola nie mogą być puste!", "Błąd",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
+
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
