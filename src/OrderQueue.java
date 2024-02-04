@@ -5,7 +5,7 @@ public class OrderQueue {
     private Queue<Zamowienie> orders;
 
     public OrderQueue() {
-        this.orders = new LinkedList<>();
+        this.orders = new LinkedList();
     }
 
     public void addOrder(Zamowienie order) {

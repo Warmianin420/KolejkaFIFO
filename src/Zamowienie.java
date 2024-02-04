@@ -30,7 +30,7 @@ public class Zamowienie {
 
     @Override
     public String toString() {
-        return "Order{" +
+        return "Zamowienie{" +
                 "id=" + id +
                 ", customerName='" + customerName + '\'' +
                 ", productName='" + productName + '\'' +
